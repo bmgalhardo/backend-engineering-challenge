@@ -1,0 +1,2 @@
+class BadLine(Exception):
+    pass
