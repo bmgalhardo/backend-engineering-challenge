@@ -3,12 +3,14 @@ import argparse
 import datetime
 import logging
 
-from app.aggregations import Aggregation
+from typing import Optional
+
+from .aggregations import Aggregation
 
 
 class InputArguments:
 
-    def __init__(self, args: list[str] = None):
+    def __init__(self, args: Optional[list[str]] = None):
         parser = self.create_parser()
         arguments = parser.parse_args(args)
 
@@ -19,17 +21,25 @@ class InputArguments:
         self.logger = arguments.logger
 
     @staticmethod
-    def check_file_exists(parser: argparse.ArgumentParser, file: str) -> str:
+    def check_file_exists(file: str) -> str:
         if os.path.isfile(file):
             return file
         else:
-            raise parser.error(f"File <{file}> does not exist")
+            raise argparse.ArgumentTypeError(f"File <{file}> does not exist")
+
+    @staticmethod
+    def check_positive(value: int) -> int:
+        i_value = int(value)
+        if i_value <= 0:
+            raise argparse.ArgumentTypeError(f"window value ({value}) must be positive")
+        return i_value
 
     def create_parser(self) -> argparse.ArgumentParser:
         parser = argparse.ArgumentParser()
         parser.add_argument('-i', '--input_file', required=True,
-                            type=lambda x: self.check_file_exists(parser, x), help='Input file')
-        parser.add_argument('-w', '--window_size', required=True, type=int,
+                            type=lambda x: self.check_file_exists(x), help='Input file')
+        parser.add_argument('-w', '--window_size', required=True,
+                            type=lambda x: self.check_positive(x),
                             help='In minutes, specify the size of the moving window used for the aggregation')
         parser.add_argument('-o', '--output_file', required=False, default="output",
                             help='Output file path')
@@ -41,7 +51,7 @@ class InputArguments:
         return parser
 
 
-def main(args: list[str] = None):
+def main(args: Optional[list[str]] = None):
     start_time = datetime.datetime.now()
 
     arguments = InputArguments(args=args)

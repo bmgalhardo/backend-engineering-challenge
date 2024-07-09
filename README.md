@@ -1,7 +1,9 @@
 # Backend Engineering Challenge
+![Python-Version](https://img.shields.io/badge/python-3.11-blue)
 
-Submission for the Unbabel Engineering Challenge. The requirement is to create a cli that parses a file, where each
-line is a JSON with the following schema:
+Submission for the Unbabel Engineering Challenge. The goal is to create a CLI that calculates the average translation
+duration within a moving window from a given input, with the translation metrics. 
+Each line in the input is a JSON object with the following schema:
 
 ```json
 {
@@ -15,49 +17,22 @@ line is a JSON with the following schema:
 	"nr_words": 100
 }
 ```
-The output should be the average within a moving window of W minutes, in 1 minute step, in the following format:
+The output should be the average translation duration within a moving window of a given number of minutes, in 1-minute 
+steps, in the following format:
 ```
 {"date": "2018-12-26 18:11:00", "average_delivery_time": 0}
 {"date": "2018-12-26 18:12:00", "average_delivery_time": 20}
 ...
 ```
-Note that if there is a malformed JSON line OR if there is a JSON line with the wrong schema (e.g. empty timestamp)
-that line will be ignored and the code will continue to run.
+> The following cases will be ignored, and the code will continue to the next line:
+> - Malformed JSON line
+> - JSON line with the wrong schema (e.g., empty timestamp)
 
-## Setup
-
-Before running, it may be useful to generate some benchmark files to test the code. 
-```
-cd benchmark
-bash create_files.sh 
-```
-It will create 3 files per size. Sizes range from 100k to 100M lines. It will take a while to generate all.
-To custom generate a single file:
-```
-usage: python benchmark/create_test_data.py [-h] -l LINES -d DAYS [-o OUTPUT]
-
-options:
-  -h, --help            show this help message and exit
-  -l LINES, --lines LINES
-                        the number of lines to generate
-  -d DAYS, --days DAYS  the number of days in the file
-  -o OUTPUT, --output OUTPUT
-                        the name of the output file
-```
 ## To Run
 
-There are some dependencies needed namely pydantic for schema validation and pytest for testing. It is recommended 
-to set up a virtual environment. Afterward install the requirements.
+Run the CLI with the appropriate inputs and chosen flags:
 ```
-pip install -r requirements.txt
-```
-To ensure the module is found, particularly if ran in a terminal add the python path:
-```
-export PYTHONPATH=src/
-```
-Finally, run the cli with the appropriate inputs and chosen flags.
-```
-usage: python src/app/main.py [-h] -i INPUT_FILE -w WINDOW_SIZE [-o OUTPUT_FILE] [-t] [-l {CRITICAL,FATAL,ERROR,WARN,WARNING,INFO,DEBUG,NOTSET}]
+usage: poetry run unbabel [-h] -i INPUT_FILE -w WINDOW_SIZE [-o OUTPUT_FILE] [-t] [-l {CRITICAL,FATAL,ERROR,WARN,WARNING,INFO,DEBUG,NOTSET}]
 
 options:
   -h, --help            show this help message and exit
@@ -74,13 +49,35 @@ options:
 ```
 ## To Test
 
-If the steps from the previous step were followed simply run the following pytest command. It will additionally provide
-the code coverage.
+Run the following command to execute the unit tests and provide code coverage:
 ```
-pytest --cov=src/app --cov-report term-missing
+poetry run pytest --cov=src/app --cov-report term-missing
 ```
 
 ## Benchmarks
+
+To generate benchmark files for testing, run:
+```
+usage: python benchmark/create_test_data.py [-h] -l LINES -d DAYS [-o OUTPUT]
+
+options:
+  -h, --help            show this help message and exit
+  -l LINES, --lines LINES
+                        the number of lines to generate
+  -d DAYS, --days DAYS  the number of days in the file
+  -o OUTPUT, --output OUTPUT
+                        the name of the output file
+```
+Optionally, use the following script to create multiple files with the number of lines ranging 
+from 100k to 100M (3 sets of each). This process may take some time:
+```
+bash benchmark/create_files.sh 
+```
+Afterward, use the run_all.sh script to run the CLI on all files in the benchmark/data folder:
+```
+bash benchmark/run_all.s
+```
+For a Macbook Pro 2019, with an Intel Core i9 2.3 GHz, the run times are as follows:
 ```
 data_s100000000_d1: 0:13:12.298921
 data_s100000000_d2: 0:13:22.223491

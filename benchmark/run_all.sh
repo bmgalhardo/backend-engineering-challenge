@@ -1,6 +1,7 @@
 #!/bin/bash
 
-export PYTHONPATH=../src/
-for d in $(ls data); do
-  python ../src/app/main.py -i ../benchmark/data/$d -w 10 -t -o output/output_$d
+folder=$(dirname $0)
+
+for d in $(ls ${folder}/data); do
+  poetry run unbabel -i ${folder}/data/$d -w 10 -t -o ${folder}/output/output_$d
 done

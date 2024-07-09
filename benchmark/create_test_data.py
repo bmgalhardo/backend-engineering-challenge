@@ -20,6 +20,19 @@ def create_entry(date: datetime.datetime) -> dict:
     return entry
 
 
+def get_file_path(output_file: str) -> str:
+    if output_file is None:
+        filename = f"data_s{data_size}_d{days}"
+    else:
+        filename = cli_arguments.output
+
+    data_path = os.path.join(os.path.dirname(__file__), "data")
+    if not os.path.exists(data_path):
+        os.mkdir(data_path)
+
+    return os.path.join(data_path, filename)
+
+
 def generate_random_timestamps(start_date: datetime.datetime,
                                end_date: datetime.datetime,
                                number_of_points: int):
@@ -46,18 +59,14 @@ if __name__ == "__main__":
 
     data_size = cli_arguments.lines
     days = cli_arguments.days
-
-    if cli_arguments.output is None:
-        filename = f"data_s{data_size}_d{days}"
-    else:
-        filename = cli_arguments.output
+    file_path = get_file_path(cli_arguments.output)
 
     now = datetime.datetime.now()
     time = generate_random_timestamps(start_date=now,
                                       end_date=now-datetime.timedelta(days=days),
                                       number_of_points=data_size)
 
-    f = open(os.path.join(os.path.dirname(__file__), "data", filename), "w")
+    f = open(file_path, "w")
     for t in time:
         f.write(json.dumps(create_entry(t)))
         f.write("\n")

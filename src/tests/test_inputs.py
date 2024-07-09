@@ -24,6 +24,12 @@ class TestInputs(unittest.TestCase):
         with pytest.raises(SystemExit):
             InputArguments()
 
+    @patch("app.main.InputArguments.check_file_exists", return_value="some_file")
+    @patch("sys.argv", ["python", "-i", "some_file", "-w", "-10"])
+    def test_negative_window(self, mock_file_exists):
+        with pytest.raises(SystemExit):
+            InputArguments()
+
     @patch("sys.argv", ["python", "-w", "10"])
     def test_missing_file_input(self):
         with pytest.raises(SystemExit):

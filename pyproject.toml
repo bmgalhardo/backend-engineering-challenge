@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "unbabel"
+version = "0.1.0"
+description = "Backend engineering challenge"
+authors = ["Bruno Galhardo <bgalhardo@gmail.com>"]
+readme = "README.md"
+packages = [{include = "app", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "2.8.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "8.2.2"
+pytest-cov = "3.0.0"
+
+[tool.poetry.scripts]
+unbabel = "src.app.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

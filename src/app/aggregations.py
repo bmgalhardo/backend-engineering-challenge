@@ -7,8 +7,8 @@ from typing import TextIO
 from pydantic import ValidationError
 from collections import deque
 
-from app.exceptions import BadLine
-from app.models import AggregatedOutput, TranslationDelivered
+from .exceptions import BadLine
+from .models import AggregatedOutput, TranslationDelivered
 
 
 class Aggregation:
