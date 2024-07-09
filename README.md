@@ -78,7 +78,7 @@ bash benchmark/create_files.sh
 Afterward, use the run_all.sh script to run the CLI on all files in the benchmark/data folder. 
 It runs for a 10-minute window:
 ```
-bash benchmark/run_all.s
+bash benchmark/run_all.sh
 ```
 For a Macbook Pro 2019, with an Intel Core i9 2.3 GHz, the run times achieved were as follows:
 ```
