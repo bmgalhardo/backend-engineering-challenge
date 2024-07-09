@@ -2,8 +2,8 @@ import datetime
 import logging
 import json
 import os.path
-from typing import TextIO
 
+from typing import TextIO
 from pydantic import ValidationError
 from collections import deque
 
@@ -13,12 +13,11 @@ from .models import AggregatedOutput, TranslationDelivered
 
 class Aggregation:
 
-    def __init__(self, input_file: str, output_file: str, window: int, silent: bool = False) -> None:
+    def __init__(self, input_file: str, output_file: str, window: int) -> None:
         self.line = self.line_queue(input_file)
         self.output = self.create_file(output_file)
         self.window = window
         self.deque = deque()
-        self.silent = silent
 
     def __del__(self):
         self.output.close()
@@ -44,10 +43,10 @@ class Aggregation:
             validated_line = TranslationDelivered(**parsed_line)
             return validated_line.timestamp, validated_line.duration
         except json.JSONDecodeError:
-            logging.warning(f"malformed JSON: {line}")
+            logging.warning(f"Malformed JSON: {line}")
             raise BadLine
         except ValidationError:
-            logging.warning(f"line not in the expected schema: {line}")
+            logging.warning(f"Line not in the expected schema: {line}")
             raise BadLine
 
     def compute(self) -> None:

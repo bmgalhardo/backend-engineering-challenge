@@ -29,10 +29,14 @@ steps, in the following format:
 > - JSON line with the wrong schema (e.g., empty timestamp)
 
 ## To Run
-
-Run the CLI with the appropriate inputs and chosen flags:
+Install poetry and cli dependencies
 ```
-usage: poetry run unbabel [-h] -i INPUT_FILE -w WINDOW_SIZE [-o OUTPUT_FILE] [-t] [-l {CRITICAL,FATAL,ERROR,WARN,WARNING,INFO,DEBUG,NOTSET}]
+pip install poetry
+poetry install
+```
+Run the CLI with the appropriate inputs and chosen flags. Windows larger than 1e6 are not allowed.
+```
+usage: poetry run unbabel [-h] -i INPUT_FILE -w WINDOW_SIZE [-o OUTPUT_FILE] [-l {DEBUG,INFO,WARNING,ERROR}]
 
 options:
   -h, --help            show this help message and exit
@@ -42,10 +46,8 @@ options:
                         In minutes, specify the size of the moving window used for the aggregation
   -o OUTPUT_FILE, --output_file OUTPUT_FILE
                         Output file path
-  -t, --time            display code running time
-  -l {CRITICAL,FATAL,ERROR,WARN,WARNING,INFO,DEBUG,NOTSET}, --logger {CRITICAL,FATAL,ERROR,WARN,WARNING,INFO,DEBUG,NOTSET}
+  -l {DEBUG,INFO,WARNING,ERROR}, --logger {DEBUG,INFO,WARNING,ERROR}
                         the logging level
-
 ```
 ## To Test
 
@@ -73,15 +75,22 @@ from 100k to 100M (3 sets of each). This process may take some time:
 ```
 bash benchmark/create_files.sh 
 ```
-Afterward, use the run_all.sh script to run the CLI on all files in the benchmark/data folder:
+Afterward, use the run_all.sh script to run the CLI on all files in the benchmark/data folder. 
+It runs for a 10-minute window:
 ```
 bash benchmark/run_all.s
 ```
-For a Macbook Pro 2019, with an Intel Core i9 2.3 GHz, the run times are as follows:
+For a Macbook Pro 2019, with an Intel Core i9 2.3 GHz, the run times achieved were as follows:
 ```
 data_s100000000_d1: 0:13:12.298921
 data_s100000000_d2: 0:13:22.223491
 data_s100000000_d5: 0:13:51.128277
+data_s50000000_d1:  0:06:50.130627
+data_s50000000_d2:  0:07:21.523824
+data_s50000000_d5:  0:07:03.976452
+data_s30000000_d1:  0:04:12.558931
+data_s30000000_d2:  0:04:13.078232
+data_s30000000_d5:  0:04:13.144238
 data_s10000000_d1:  0:01:20.282275
 data_s10000000_d2:  0:01:21.057366
 data_s10000000_d5:  0:01:20.870284
@@ -93,3 +102,4 @@ data_s100000_d2:    0:00:00.829133
 data_s100000_d5:    0:00:00.866571
 data_example:       0:00:00.001341
 ```
+![Benchmarks](./benchmark.png)

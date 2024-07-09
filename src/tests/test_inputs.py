@@ -16,7 +16,6 @@ class TestInputs(unittest.TestCase):
         assert inputs.input_file == "some_file"
         assert inputs.window_size == 10
         assert inputs.output_file == "output"
-        assert not inputs.time
         assert inputs.logger
 
     @patch("sys.argv", ["python", "-i", "some_file", "-w", "10"])
@@ -27,6 +26,18 @@ class TestInputs(unittest.TestCase):
     @patch("app.main.InputArguments.check_file_exists", return_value="some_file")
     @patch("sys.argv", ["python", "-i", "some_file", "-w", "-10"])
     def test_negative_window(self, mock_file_exists):
+        with pytest.raises(SystemExit):
+            InputArguments()
+
+    @patch("app.main.InputArguments.check_file_exists", return_value="some_file")
+    @patch("sys.argv", ["python", "-i", "some_file", "-w", "this_window"])
+    def test_string_window(self, mock_file_exists):
+        with pytest.raises(SystemExit):
+            InputArguments()
+
+    @patch("app.main.InputArguments.check_file_exists", return_value="some_file")
+    @patch("sys.argv", ["python", "-i", "some_file", "-w", "1000000000000"])
+    def test_large_window(self, mock_file_exists):
         with pytest.raises(SystemExit):
             InputArguments()
 

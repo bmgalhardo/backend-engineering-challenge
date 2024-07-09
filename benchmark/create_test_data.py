@@ -66,6 +66,8 @@ if __name__ == "__main__":
                                       end_date=now-datetime.timedelta(days=days),
                                       number_of_points=data_size)
 
+    print(f"Creating file {file_path}")
+
     f = open(file_path, "w")
     for t in time:
         f.write(json.dumps(create_entry(t)))
