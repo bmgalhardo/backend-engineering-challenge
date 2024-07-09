@@ -29,7 +29,7 @@ steps, in the following format:
 > - JSON line with the wrong schema (e.g., empty timestamp)
 
 ## To Run
-Install poetry and cli dependencies
+Inside the root directory, execute the following commands to install poetry and CLI dependencies.
 ```
 pip install poetry
 poetry install
@@ -82,24 +82,29 @@ bash benchmark/run_all.sh
 ```
 For a Macbook Pro 2019, with an Intel Core i9 2.3 GHz, the run times achieved were as follows:
 ```
-data_s100000000_d1: 0:13:12.298921
-data_s100000000_d2: 0:13:22.223491
-data_s100000000_d5: 0:13:51.128277
-data_s50000000_d1:  0:06:50.130627
-data_s50000000_d2:  0:07:21.523824
-data_s50000000_d5:  0:07:03.976452
-data_s30000000_d1:  0:04:12.558931
-data_s30000000_d2:  0:04:13.078232
-data_s30000000_d5:  0:04:13.144238
-data_s10000000_d1:  0:01:20.282275
-data_s10000000_d2:  0:01:21.057366
-data_s10000000_d5:  0:01:20.870284
-data_s1000000_d1:   0:00:08.328551
-data_s1000000_d2:   0:00:07.891245
-data_s1000000_d5:   0:00:08.262960
-data_s100000_d1:    0:00:00.790489
-data_s100000_d2:    0:00:00.829133
-data_s100000_d5:    0:00:00.866571
-data_example:       0:00:00.001341
+--------------------------------
+number of lines | computation time
+--------------------------------
+100000000_d1    | 0:13:12.298921
+100000000_d2    | 0:13:22.223491
+100000000_d5    | 0:13:51.128277
+50000000_d1     | 0:06:50.130627
+50000000_d2:    | 0:07:21.523824
+50000000_d5:    | 0:07:03.976452
+30000000_d1:    | 0:04:12.558931
+30000000_d2:    | 0:04:13.078232
+30000000_d5:    | 0:04:13.144238
+10000000_d1:    | 0:01:20.282275
+10000000_d2:    | 0:01:21.057366
+10000000_d5:    | 0:01:20.870284
+1000000_d1:     | 0:00:08.328551
+1000000_d2:     | 0:00:07.891245
+1000000_d5:     | 0:00:08.262960
+100000_d1:      | 0:00:00.790489
+100000_d2:      | 0:00:00.829133
+100000_d5:      | 0:00:00.866571
+--------------------------------
 ```
+The following image plots the values present in the previous table.
+
 ![Benchmarks](./benchmark.png)
